@@ -211,21 +211,63 @@
   }
   .hire-badge:hover{ transform:translateX(-130%) scale(1.06); background:var(--accent-2); }
 
-  /* giant display name across the hero base */
+  /* giant display name across the hero base — sized to always fit the wrap */
   .hero-name{
     position:relative;
     z-index:1;
-    margin-top:clamp(-90px, -6vw, -28px);
+    margin-top:clamp(-80px, -5.5vw, -24px);
     font-family:var(--font-display);
     font-weight:900;
-    font-size:clamp(58px, 12.5vw, 176px);
+    font-size:clamp(48px, 10.2vw, 138px);
     line-height:.92;
     letter-spacing:-.03em;
     text-transform:uppercase;
     text-align:center;
     white-space:nowrap;
   }
+  .hero-name .first{ color:var(--text); }
   .hero-name .last{ color:var(--dim); }
+
+  /* lighting: a soft shine sweeps across the name; glow behind the photo breathes.
+     Both live inside no-preference so reduced-motion users get static text. */
+  @media (prefers-reduced-motion: no-preference){
+    .hero-name .first, .hero-name .last{
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      -webkit-text-fill-color:transparent;
+      background-size:230% 100%;
+      animation:shine 7s linear infinite;
+    }
+    .hero-name .first{
+      background-image:linear-gradient(105deg,
+        var(--text) 0%, var(--text) 42%, #4E86F7 50%, var(--text) 58%, var(--text) 100%);
+    }
+    .hero-name .last{
+      background-image:linear-gradient(105deg,
+        var(--dim) 0%, var(--dim) 42%, #7FA8F2 50%, var(--dim) 58%, var(--dim) 100%);
+      animation-delay:.6s;
+    }
+    .portrait::before{ animation:glowPulse 5.5s ease-in-out infinite; }
+  }
+  @keyframes shine{
+    0%{ background-position:130% 0; }
+    100%{ background-position:-130% 0; }
+  }
+  @keyframes glowPulse{
+    0%, 100%{ opacity:.82; }
+    50%{ opacity:1; }
+  }
+
+  /* scroll-reveal: JS adds .reveal to sections/cards, .in when they enter view */
+  @media (prefers-reduced-motion: no-preference){
+    .reveal{
+      opacity:0;
+      transform:translateY(26px);
+      transition:opacity .7s cubic-bezier(.2,.6,.2,1), transform .7s cubic-bezier(.2,.6,.2,1);
+    }
+    .reveal.in{ opacity:1; transform:none; }
+  }
 
   /* ------------------------------------------------------------ stat row */
   .statboard{
@@ -542,7 +584,13 @@
       margin-top:10px; font-size:30px; text-align:left;
       white-space:normal; color:#000;
     }
-    .hero-name .last{ color:#000; }
+    .hero-name .first, .hero-name .last{
+      background:none !important;
+      -webkit-background-clip:initial; background-clip:initial;
+      -webkit-text-fill-color:initial;
+      color:#000; animation:none;
+    }
+    .reveal{ opacity:1 !important; transform:none !important; }
     .statboard{ margin-top:16px; gap:8px; page-break-inside:avoid; }
     .stat{ background:#fff; border:1px solid #999; border-radius:0; padding:10px 6px; }
     .stat-figure{ color:#000; font-size:20px; }
@@ -617,7 +665,7 @@
         </div>
       </div>
 
-      <h1 class="hero-name">Salih <span class="last">Thazhe</span></h1>
+      <h1 class="hero-name"><span class="first">Salih</span> <span class="last">Thazhe</span></h1>
 
       <!-- ================================== stat row -->
       <div class="statboard" aria-label="Key figures">
@@ -949,6 +997,30 @@
       io.observe(board);
     } else {
       runCountUp();
+    }
+
+    /* Scroll-reveal: sections and cards fade up as they enter the viewport.
+       Skipped entirely under reduced motion or without IntersectionObserver,
+       so content is never hidden. */
+    if (!reduced && "IntersectionObserver" in window) {
+      var revealTargets = document.querySelectorAll(
+        ".section-head, .card, .tool-col, .timeline li, .stat, .contact-panel"
+      );
+      var revealIO = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            revealIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+      revealTargets.forEach(function(el){
+        var siblings = el.parentNode.children;
+        var idx = Array.prototype.indexOf.call(siblings, el);
+        el.classList.add("reveal");
+        el.style.transitionDelay = (idx % 6) * 70 + "ms";
+        revealIO.observe(el);
+      });
     }
   })();
 </script>
