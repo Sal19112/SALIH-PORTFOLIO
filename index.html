@@ -551,8 +551,15 @@
     .hero-grid{ grid-template-columns:1fr; gap:40px; }
     .hero-copy{ padding-bottom:0; }
     .portrait{ width:min(64vw, 320px); }
-    .hire-badge{ width:96px; height:96px; font-size:9px; }
-    .hero-name{ white-space:normal; line-height:.95; margin-top:-4vw; }
+    /* phones: no overlap tricks — badge sits on the photo's corner,
+       name fully visible below the photo */
+    .hire-badge{
+      width:92px; height:92px; font-size:9px;
+      left:auto; right:-10px; bottom:-10px;
+      transform:none;
+    }
+    .hire-badge:hover{ transform:scale(1.05); }
+    .hero-name{ white-space:normal; line-height:.95; margin-top:22px; }
     .statboard{ grid-template-columns:1fr 1fr; }
     .work-grid{ grid-template-columns:1fr; }
     .toolkit-grid{ grid-template-columns:1fr; }
