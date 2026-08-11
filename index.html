@@ -209,16 +209,16 @@
   }
   .portrait::before{
     content:"";
-    position:absolute; inset:-9%;
+    position:absolute; inset:-14%;
     border-radius:50%;
-    /* multi-tone conic ring so rotation is visible; radial mask keeps the
-       soft halo edge. Rotation angle driven by scroll via --frame-rot. */
+    /* thick multi-tone conic ring so the scroll rotation reads clearly;
+       rotation angle driven by scroll via --frame-rot. */
     background:conic-gradient(from 0deg,
-      var(--accent-2), #9DBDF9 22%, var(--accent) 48%,
-      #6FA0F5 70%, #BFD5FA 86%, var(--accent-2));
-    -webkit-mask-image:radial-gradient(circle, #000 52%, transparent 74%);
-    mask-image:radial-gradient(circle, #000 52%, transparent 74%);
-    filter:blur(8px);
+      #1D4ED8, #93C5FD 18%, #2563EB 36%, #DBEAFE 52%,
+      #3B82F6 68%, #BFDBFE 84%, #1D4ED8);
+    -webkit-mask-image:radial-gradient(circle, #000 66%, transparent 72%);
+    mask-image:radial-gradient(circle, #000 66%, transparent 72%);
+    filter:blur(3px);
     transform:rotate(var(--frame-rot, 0deg));
     will-change:transform;
   }
@@ -237,23 +237,31 @@
     left:50%; bottom:-8%;
     transform:translateX(-130%);
     z-index:3;
-    width:118px; height:118px;
+    width:122px; height:122px;
     border-radius:50%;
-    background:var(--accent);
+    background:linear-gradient(140deg, #2563EB, #60A5FA);
+    border:3px solid rgba(255,255,255,.92);
     color:#fff;
-    display:flex; align-items:center; justify-content:center;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px;
     text-align:center;
     text-decoration:none;
     font-family:var(--font-mono);
     font-size:10px;
+    font-weight:600;
     letter-spacing:.14em;
     text-transform:uppercase;
     line-height:1.5;
     padding:14px;
-    box-shadow:0 12px 40px rgba(37,99,235,.35);
-    transition:transform .15s ease, background .15s ease;
+    box-shadow:0 14px 40px rgba(37,99,235,.4), 0 0 0 6px rgba(37,99,235,.12);
+    transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease;
   }
-  .hire-badge:hover{ transform:translateX(-130%) scale(1.06); background:var(--accent-2); }
+  .hire-badge svg{ width:16px; height:16px; transition:transform .25s ease; }
+  .hire-badge:hover{
+    transform:translateX(-130%) scale(1.09);
+    box-shadow:0 18px 50px rgba(37,99,235,.5), 0 0 0 9px rgba(37,99,235,.16);
+  }
+  .hire-badge:hover svg{ transform:translate(2px,-2px); }
 
   /* display name — leads the hero copy */
   .hero-name{
@@ -745,7 +753,10 @@
         <div class="portrait">
           <img src="assets/portrait.jpg" alt="Portrait of Salih Thaikkandy Thazhe">
           <!-- EDIT: email — currently set to salihsal212@gmail.com; change if needed -->
-          <a class="hire-badge" href="mailto:salihsal212@gmail.com">Get in<br>touch</a>
+          <a class="hire-badge" href="mailto:salihsal212@gmail.com">
+            <span>Get in<br>touch</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>
+          </a>
         </div>
       </div>
 
