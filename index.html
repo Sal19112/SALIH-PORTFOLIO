@@ -211,8 +211,16 @@
     content:"";
     position:absolute; inset:-9%;
     border-radius:50%;
-    background:radial-gradient(circle at 50% 32%, var(--accent-2) 0%, var(--accent) 42%, rgba(37,99,235,.12) 72%, transparent 78%);
-    filter:blur(2px);
+    /* multi-tone conic ring so rotation is visible; radial mask keeps the
+       soft halo edge. Rotation angle driven by scroll via --frame-rot. */
+    background:conic-gradient(from 0deg,
+      var(--accent-2), #9DBDF9 22%, var(--accent) 48%,
+      #6FA0F5 70%, #BFD5FA 86%, var(--accent-2));
+    -webkit-mask-image:radial-gradient(circle, #000 52%, transparent 74%);
+    mask-image:radial-gradient(circle, #000 52%, transparent 74%);
+    filter:blur(8px);
+    transform:rotate(var(--frame-rot, 0deg));
+    will-change:transform;
   }
   .portrait img{
     position:relative;
@@ -1154,6 +1162,22 @@
         el.style.transitionDelay = (idx % 6) * 70 + "ms";
         revealIO.observe(el);
       });
+    }
+
+    /* Blue frame around the portrait rotates as you scroll.
+       Skipped under reduced motion. */
+    var portrait = document.querySelector(".portrait");
+    if (!reduced && portrait) {
+      var frameTicking = false;
+      window.addEventListener("scroll", function(){
+        if (!frameTicking) {
+          requestAnimationFrame(function(){
+            portrait.style.setProperty("--frame-rot", (window.scrollY * 0.25) + "deg");
+            frameTicking = false;
+          });
+          frameTicking = true;
+        }
+      }, { passive: true });
     }
   })();
 </script>
