@@ -204,7 +204,7 @@
     position:relative;
     justify-self:center;
     z-index:2;
-    width:min(38vw, 430px);
+    width:min(32vw, 362px);
     aspect-ratio:1;
   }
   .portrait::before{
@@ -220,9 +220,9 @@
      and directions, driven by scroll via --frame-rot */
   .frame-svg{
     position:absolute;
-    inset:-16%;
-    width:132%;
-    height:132%;
+    inset:-13%;
+    width:126%;
+    height:126%;
     overflow:visible;
   }
   .frame-svg .ring-slow,
@@ -250,7 +250,7 @@
     left:50%; bottom:-8%;
     transform:translateX(-130%);
     z-index:3;
-    width:122px; height:122px;
+    width:108px; height:108px;
     border-radius:50%;
     background:linear-gradient(140deg, #2563EB, #60A5FA);
     border:3px solid rgba(255,255,255,.92);
@@ -634,11 +634,11 @@
   @media (max-width: 860px){
     .hero-grid{ grid-template-columns:1fr; gap:40px; }
     .hero-copy{ padding-bottom:0; }
-    .portrait{ width:min(64vw, 320px); }
+    .portrait{ width:min(56vw, 272px); }
     /* phones: no overlap tricks — badge sits on the photo's corner,
        name fully visible below the photo */
     .hire-badge{
-      width:92px; height:92px; font-size:9px;
+      width:84px; height:84px; font-size:9px;
       left:auto; right:-10px; bottom:-10px;
       transform:none;
     }
